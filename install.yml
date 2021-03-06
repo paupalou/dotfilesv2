@@ -1,0 +1,133 @@
+dependencies:
+  -
+    name: apt-utils 
+    from: apt
+  -
+    name: curl 
+    from: apt
+  -
+    name: wget
+    from: apt
+  -
+    name: software-properties-common
+    from: apt
+    run: "sudo apt-get update -y"
+  - 
+    name: git 
+    from: apt
+
+apps:
+  -
+    name: fish
+    from: apt
+    repository: fish-shell/release-3
+  -
+    name: neovim
+    from: apt
+    repository: neovim-ppa/unstable
+  -
+    name: firefox
+    from: apt
+  -
+    name: lazygit
+    from: apt
+    repository: lazygit-team/release
+  -
+    name: ranger
+    from: apt
+  -
+    name: tmux
+    from: apt
+  -
+    name: mpv
+    from: apt
+  - 
+    name: fd
+    from: github
+    type: latest_release
+    repository: sharkdp/fd
+  -
+    name: bat
+    from: github
+    type: latest_release
+    repository: sharkdp/bat
+  - 
+    name: ripgrep
+    from: github
+    type: latest_release
+    repository: BurntSushi/ripgrep
+  -
+    name: fzf
+    from: github
+    type: source
+    repository: junegunn/fzf
+    path: $HOME/.fzf
+    bin: $HOME/.fzf/bin/fzf
+    run: install --all
+  - 
+    name: nodejs
+    from: apt
+    run: "curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -"
+  -
+    name: exa
+    from: ubuntu
+    type: package_file
+    repository: r/rust-exa
+    version: 0.9.0-4
+  -
+    name: youtube-dl
+    from: curl
+    type: binary
+    path: $HOME/.local/bin
+    bin: $HOME/.local/bin/youtube-dl
+    run:  "curl -L https://yt-dl.org/downloads/latest/youtube-dl --create-dirs -o $HOME/.local/bin/youtube-dl && chmod a+rx $HOME/.local/bin/youtube-dl"
+    depends:
+      - 
+        name: python-is-python3
+        from: apt
+  - 
+    name: kitty
+    from: curl
+    type: binary
+    path: $HOME/.local/kitty.app
+    bin: $HOME/.local/kitty.app/bin/kitty
+    run: "curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin"
+    depends:
+      - 
+        name: libfontconfig1
+        from: apt
+  - 
+    name: musikcube
+    from: github
+    type: release
+    repository: clangen/musikcube
+    version: 0.96.4
+    suffix: ubuntu_focal
+    depends:
+      - 
+        name: libboost-system1.71.0
+        from: apt
+      - 
+        name: libboost-filesystem1.71.0
+        from: apt
+      - 
+        name: libboost-thread1.71.0
+        from: apt
+      -
+        name: libboost-chrono1.71.0
+        from: apt
+      -
+        name: libboost-date-time1.71.0
+        from: apt
+      -
+        name: libmicrohttpd12
+        from: apt
+      -
+        name: libev4
+        from: apt
+      -
+        name: libavcodec-extra
+        from: apt
+      -
+        name: pulseaudio
+        from: apt

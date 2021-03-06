@@ -1,0 +1,400 @@
+#!/bin/bash
+
+source ./script/yaml_parser
+source ./script/print_utils
+
+declare -r DEFAULT_PACKAGE_MANAGER=apt
+
+function check_sudo {
+	if ! command -v sudo &> /dev/null; then
+		echo "sudo is not installed, install it (as root)"
+		exit 1
+	fi
+}
+
+function set_localtime {
+  local localtime_file=/etc/localtime
+  if [ ! -f "$localtime" ]; then
+    local TZ=Europe/Madrid
+    sudo ln -snf /usr/share/zoneinfo/$TZ /etc/localtime
+  fi
+}
+
+function parse_software {
+  eval $(parse_yaml $1)
+}
+
+function show_usage {
+  printf "Usage: $0 [OPTION=PARAMETERS]\n"
+  printf "Utility to synchronize your deps, apps and configs\n"
+  printf "\n"
+  printf "${uline}Options:\n$normal"
+  print_help_option "-h, --help" "Print help"
+  print_help_option "-i, --install" "Install all groups in install.yml"
+  print_help_option "    --install=group" "Install only a group, must be defined in install.yml"
+  print_help_option "-c, --config" "Symlink all files inside directory"
+  print_help_option "-c, --config=directory" "Symlink specific directory"
+
+  return 0
+}
+
+function link_file {
+  local src=$1 dst=$2 print_each_skipped_file=$4
+  local overwrite backup skip action
+
+  if [ -f "$dst" -o -d "$dst" ]; then
+
+    if [ "$overwrite_all" == "false" ] && [ "$backup_all" == "false" ] && [ "$skip_all" == "false" ]; then
+      local currentSrc="$(readlink $dst)"
+      if [ "$currentSrc" == "$src" ]; then
+        if  [ "$print_each_skipped_file" != "false" ]; then
+          success "skipped ${cyan}$src${normal}" "$3"
+        fi
+        return
+      else
+
+        user "${bold}$dst${normal} already exists, what to do?"
+        user_option "[${bold}s${normal}]kip ───────────── [${bold}S${normal}]kip all"
+        user_option "[${bold}o${normal}]verwrite ──────── [${bold}O${normal}]verwrite all"
+        user_option "[${bold}b${normal}]ackup ─────────── [${bold}B${normal}]ackup all?"
+        read -n 1 action
+
+        case "$action" in
+          o )
+            overwrite=true;;
+          O )
+            overwrite_all=true;;
+          b )
+            backup=true;;
+          B )
+            backup_all=true;;
+          s )
+            skip=true;;
+          S )
+            skip_all=true;;
+          * )
+            ;;
+        esac
+      fi
+    fi
+
+    overwrite=${overwrite:-$overwrite_all}
+    backup=${backup:-$backup_all}
+    skip=${skip:-$skip_all}
+
+    if [ "$overwrite" == "true" ]; then
+      rm -rf "$dst"
+      success "removed ${cyan}$dst${normal}" "$3"
+      ((file_counter-=1))
+    fi
+
+    if [ "$backup" == "true" ]; then
+      mv "$dst" "${dst}.backup"
+      success "moved   ${cyan}$dst${normal} to ${dst}.backup" "$3"
+      ((file_counter-=1))
+    fi
+
+    if [ "$skip" == "true" ]; then
+      success "skipped ${cyan}$src${normal}" "$3"
+    fi
+  fi
+
+  if [ "$skip" != "true" ]; then
+    ln -s "$src" "$dst"
+    success "linked  ${lgreen}$2${normal}" "$3"
+    ((file_counter-=1))
+  fi
+}
+
+
+function subfolder_files {
+  local topic=$1
+  local subfolder=$2
+  # verbose is true by default and only applies to 'skip' action
+  local verbose=${3:-'true'}
+
+  # contains number of files skipped and used only when verbose is false
+  local file_counter=0
+
+  local overwrite_all=false backup_all=false skip_all=false
+  for src in $(find -H $HOME/dotfiles/$topic/$subfolder -type f ! -path "*/.git/*" -type f ! -path "*/.*" -printf '%P\n')
+  do
+    local child_visual_line="──"
+    local src_dirname="/$(dirname "$src")"
+
+    # if we find symlink in first level assume src is 1st-child of $subfolder
+    # so we unset src_dirname to avoid adding a dot (.)
+    if [ $(dirname "$src") == "." ]; then
+      src_dirname=""
+    fi
+    # local destiny_directory="$HOME/.$topic/$subfolder$src_dirname"
+    local destiny_directory="$HOME/.$subfolder$src_dirname"
+    ((file_counter+=1))
+
+    # check if destiny directory exists , create if not
+    if [ ! -d $destiny_directory ]; then
+      warn "creating directory → $destiny_directory${normal}" '──'
+      mkdir -p "$destiny_directory"
+      # double visual line to make visual appearance as child of this directory
+      child_visual_line="──────"
+    fi
+
+    # build destiny with destiny_directory + file_name
+    dst="$destiny_directory/$(basename "${src}")"
+
+    # link the file
+    link_file "$HOME/dotfiles/$topic/$subfolder/$src" "$dst" "$child_visual_line" "$verbose"
+  done
+
+  if [ $verbose == "false" ] && [ $file_counter -gt 0 ]; then
+    success "skipped ${cyan}$file_counter${normal} files" "$child_visual_line"
+  fi
+}
+
+function symlink_files {
+  _start 'linking dotfiles'
+
+  local files=$(find -H $HOME/dotfiles/ -mindepth 2 -maxdepth 2 -type f ! -path "*/.git/*" ! -path "*/script/*")
+  local overwrite_all=false backup_all=false skip_all=false
+
+  local topics=$(find -H $HOME/dotfiles/ -mindepth 1 -maxdepth 1 -type d ! -path "*/.git" ! -path "*/ script")
+
+  for src in $files; do
+    local dst="$HOME/.$(basename "${src%.*}")"
+    echo $src
+    echo $dst
+    link_file $src $dst
+  done
+
+  for src in $(find $HOME/dotfiles/ -mindepth 2 -maxdepth 2 ! -path "*/.git" -type d -printf '%P\n' | sort)
+  do
+    local topic=$(dirname "$src")
+    local subfolder=$(basename "$src")
+
+    # print a title of this subfolder
+    subfolder_title $bold$topic $normal$subfolder
+
+    # link files inside subfolders
+    # last argument is verbose, if you pass false a compact message will be printed
+    subfolder_files $topic $subfolder false
+  done
+
+  _end
+}
+
+function install {
+  check_sudo
+  set_localtime
+  local package_types
+
+  if [ -z "$1" ]; then
+    package_types=$__
+  else
+    package_types=$1
+  fi
+
+  for type in $package_types; do
+    install_items $type
+  done
+}
+
+function get_value {
+  local prop=$1_$2
+  local value=${!prop}
+  if [ -n "$value" ]; then
+    echo $value
+  else
+    echo $3
+  fi
+}
+
+function install_item {
+    local item=$1
+    local is_subitem=$2
+    local is_last_item=$3
+    local should_install=true
+
+    local name=$(get_value $item "name")
+    local bin=$(get_value $item "bin")
+		if is_package_installed $name "$bin" "$is_subitem" "$is_last_item" ; then
+      should_install=false
+    fi
+
+    local depends=${item}_depends_
+    if [ -n "${!depends}" ]; then
+      local index=1
+      local dependencys=${!depends}
+      local num_deps=$(echo "${dependencys}" | wc -w)
+      for dependency in ${!depends}; do
+        index=$(( index+1 ))
+        local is_last_item
+        if [ "$index" -gt "$num_deps" ];then
+          is_last_item=true
+        fi
+        install_item $dependency true $is_last_item
+      done
+    fi
+
+    local type=$(get_value $item "type" "package")
+    local from=$(get_value $item "from" $DEFAULT_PACKAGE_MANAGER)
+    local repository=$(get_value $item "repository")
+    local version=$(get_value $item "version")
+    local path=$(get_value $item "path")
+    local run=$(get_value $item "run")
+    local suffix=$(get_value $item "suffix")
+
+    $should_install && install_${type}_from_${from} "$name" "$repository" "$version" "$path" "$run" "$suffix" "$is_subitem"
+}
+
+function install_items {
+  local items=$1
+  local category=${items}_
+
+  _start $items
+
+  for item in ${!category}; do
+    install_item $item
+  done
+
+  _end $items
+}
+
+function is_ppa_added {
+	apt-cache policy | grep -q $1
+}
+
+function run_command {
+  eval "$1" &>/dev/null
+}
+
+
+function add_ppa {
+	print_adding_repository $1
+	sudo add-apt-repository ppa:$1 -y 1>/dev/null
+	echo $(pc "  ✓" $green$bold)
+}
+
+function is_package_installed {
+  local package=$1
+  local bin=$2
+  local is_subitem=$3
+  local is_last_item=$4
+	local version
+
+	if [ -z "$bin" ]; then
+		version="$(dpkg -s $package 2>/dev/null | grep '^Version' | cut -d ' ' -f 2 | cut -d : -f 2 | cut -d - -f 1 | cut -d + -f 1)"
+	else
+		[ -f "$bin" ] && version="$($bin --version | head -1 | grep -o -e '[0-9]\+\(\.[0-9]\+\)*' | head -1)"
+	fi
+
+	if [ -z "$version" ]; then
+		print_dependency_failed $1 $is_subitem
+		return 1
+	fi
+
+	print_dependency_success $1 $version $is_subitem $is_last_item
+	return 0
+}
+
+function install_package_file_from_ubuntu {
+  local package_name=$1
+  local repository=$2
+  local version=$3
+  print_installing $package_name "ubuntu"
+
+  local package_file=${package_name}_${version}_amd64.deb
+  wget http://es.archive.ubuntu.com/ubuntu/pool/universe/$repository/$package_file &>/dev/null
+
+  sudo dpkg -i $package_file 1>/dev/null
+  rm $package_file
+  echo $(pc "  ✓" $green$bold)
+}
+
+function install_package_from_apt {
+  local package_name=$1
+  local repository=$2
+  local run=$5
+  local is_package_dependency=$7
+
+	if [ -n "$repository" ]; then
+    if ! is_ppa_added $repository; then
+      add_ppa $repository
+    fi
+  fi
+
+  if [ -n "$run" ]; then
+    run_command "$run"
+  fi
+
+	print_installing $package_name "apt" $is_package_dependency
+	local debconf_warning="debconf: delaying package configuration, since apt-utils is not installed"
+	local templates_warning="Extracting templates from packages: 100%"
+
+  sudo DEBIAN_FRONTEND=noninteractive apt-get install -y $1 1>/dev/null 2>&1 | grep -v "$debconf_warning" | grep -v "$templates_warning"
+
+	echo $(pc "  ✓" $green$bold)
+}
+
+function install_latest_release_from_github {
+  local package_name=$1
+  local repository=$2
+	print_installing $repository "github"
+	local latest_release=$(curl --silent "https://api.github.com/repos/$repository/releases/latest" |
+		grep '"tag_name":' |
+		sed -E 's/.*"([^"]+)".*/\1/')
+
+	local package_file=${package_name}_${latest_release}_amd64.deb
+	if [ ${latest_release:0:1} = v ]; then
+		# in case we curl version like v1.2.3 remove the v
+		package_file=${package_name}_${latest_release:1}_amd64.deb
+	fi
+
+	wget https://github.com/$repository/releases/download/$latest_release/$package_file &>/dev/null
+
+	sudo dpkg -i $package_file 1>/dev/null
+	rm $package_file
+
+	echo $(pc "  ✓" $green$bold)
+}
+
+function install_release_from_github {
+  local name=$1
+  local repository=$2
+  local version=$3
+  local suffix=$6
+
+	print_installing $name "github"
+
+	local package_file=${name}_${version}_${suffix}_amd64.deb
+
+	wget https://github.com/$repository/releases/download/$version/$package_file &>/dev/null
+
+	sudo dpkg -i $package_file 1>/dev/null
+	rm $package_file
+
+	echo $(pc "  ✓" $green$bold)
+}
+
+function install_source_from_github {
+  local name=$1
+  local repository=$2
+  local destination_path=$4
+  local run=$5
+
+	print_installing $name "github"
+	git clone --depth 1 https://github.com/${repository}.git ${destination_path} &>/dev/null
+	command $destination_path/$run &>/dev/null
+
+	echo $(pc "  ✓" $green$bold)
+}
+
+function install_binary_from_curl {
+  local name=$1
+  local run=$5
+
+	print_installing $name "curl"
+
+	run_command "$run"
+
+	echo $(pc "  ✓" $green$bold)
+}

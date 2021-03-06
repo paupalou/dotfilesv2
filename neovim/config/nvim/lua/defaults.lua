@@ -1,0 +1,31 @@
+vim.o.shell = '/usr/bin/bash'
+vim.o.showmatch = true
+vim.o.hidden = true
+vim.o.errorbells = false
+vim.o.tabstop = 2
+vim.o.softtabstop = 2
+vim.o.shiftwidth = 2
+vim.o.expandtab = true
+vim.o.smartindent = true
+vim.o.smarttab = true
+vim.o.wrap = false
+vim.o.swapfile = false
+vim.o.backup = false
+vim.o.updatetime = 50
+vim.o.showmode = false
+vim.o.showcmd = false
+vim.o.cmdheight = 1
+vim.o.scrolloff = 8
+vim.o.clipboard = 'unnamedplus'
+vim.o.incsearch = true
+vim.o.inccommand = 'split' 
+vim.o.signcolumn = 'auto'
+vim.o.completeopt = 'menuone,noselect'
+vim.o.mouse = 'nvr'
+
+vim.wo.number = true
+vim.wo.relativenumber = true
+
+vim.cmd [[set shortmess+=c]]
+
+vim.g.mapleader = ' '

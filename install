@@ -1,0 +1,50 @@
+#!/bin/bash
+
+source ./script/installers
+
+parse_software "./install.yml"
+
+if [[ ${#} -eq 0 ]]; then
+  install
+  symlink_files
+fi
+
+while getopts ":hic-:" option; do
+  case "$option" in
+    h)
+      show_usage
+      exit;;
+    i)
+      install
+      exit;;
+    c)
+      symlink_files
+      exit;;
+    -)
+      case "${OPTARG}" in
+        help)
+          show_usage
+          ;;
+        install)
+          install
+          ;;
+        install=*)
+          parameter=${OPTARG#*=}
+          install $parameter
+          ;;
+        config)
+          symlink_files
+          ;;
+        config=*)
+          parameter=${OPTARG#*=}
+          symlink_files $parameter
+          ;;
+        *)
+          echo "Unkown option --${OPTARG}, use --help"
+          ;;
+      esac;;
+    ?)
+      echo "Unkown option -${OPTARG}, use -h for help"
+      exit;;
+  esac
+done

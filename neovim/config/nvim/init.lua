@@ -1,0 +1,7 @@
+require 'defaults'
+require 'utils'
+require 'plugins'
+require 'theme'
+require 'remaps'
+require 'lsp'
+require 'plugins.config'
