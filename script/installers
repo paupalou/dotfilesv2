@@ -151,13 +151,22 @@ function subfolder_files {
   fi
 }
 
+function _not_match {
+  for i in ${@}; do
+    echo ! -name $i
+  done
+}
+
 function symlink_files {
   _start 'linking dotfiles'
 
-  local files=$(find -H $HOME/dotfiles/ -mindepth 2 -maxdepth 2 -type f ! -path "*/.git/*" ! -path "*/script/*")
+  local excluded_files=("path.fish")
+  local exclude_file_list=$(_not_match ${excluded_files[@]})
+
+  local files=$(find -H $HOME/dotfiles/ -mindepth 2 -maxdepth 2 -type f ! -path "*/.git/*" ! -path "*/script/*" $exclude_file_list)
   local overwrite_all=false backup_all=false skip_all=false
 
-  local topics=$(find -H $HOME/dotfiles/ -mindepth 1 -maxdepth 1 -type d ! -path "*/.git" ! -path "*/ script")
+  local topics=$(find -H $HOME/dotfiles/ -mindepth 1 -maxdepth 1 -type d ! -path "*/.git" ! -path "*/script")
 
   for src in $files; do
     local dst="$HOME/.$(basename "${src%.*}")"
@@ -166,7 +175,7 @@ function symlink_files {
     link_file $src $dst
   done
 
-  for src in $(find $HOME/dotfiles/ -mindepth 2 -maxdepth 2 ! -path "*/.git" -type d -printf '%P\n' | sort)
+  for src in $(find $HOME/dotfiles/ -mindepth 2 -maxdepth 2 ! -path "*/.git/*" -type d -printf '%P\n' | sort)
   do
     local topic=$(dirname "$src")
     local subfolder=$(basename "$src")
