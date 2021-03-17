@@ -1,5 +1,5 @@
-local lualine = require('lualine')
-lualine.options.theme = 'oceanicnext'
-lualine.sections.lualine_x = { 'filetype' }
-lualine.extensions = { 'fzf' }
-lualine.status()
+require('lualine').setup{
+	options = { theme = 'oceanicnext' },
+	sections = { lualine_x = { 'filetype' } },
+	extensions = { 'fzf' }
+}
