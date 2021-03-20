@@ -87,6 +87,9 @@ return require('packer').startup {
       config = function() require('lspkind').init({}) end
     }
 
+    -- improved matchit
+    use 'andymass/vim-matchup'
+
     -- ui for lsp
     use 'glepnir/lspsaga.nvim'
 
@@ -110,9 +113,12 @@ return require('packer').startup {
     use 'dag/vim-fish'
 
     -- treesitter syntax
+    use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
+
+    -- file explorer
     use {
-      'nvim-treesitter/nvim-treesitter',
-      run = function() vim.cmd [[TSUpdate]] end
+      'kyazdani42/nvim-tree.lua',
+      requires = {'kyazdani42/nvim-web-devicons'}
     }
   end
 }

@@ -1,4 +1,3 @@
--- vim: set filetype=lua:
 local treesitter = require'nvim-treesitter.configs'
 
 treesitter.setup {
@@ -6,4 +5,4 @@ treesitter.setup {
   highlight = {
     enable = true,
   },
-} 
+}
