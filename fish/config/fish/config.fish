@@ -1,8 +1,6 @@
 set fish_pager_color_progress brblack --background=brmagenta
 set fish_greeting
 
-set fzf_preview_dir_cmd exa --all --color=always
-
 set -gx EDITOR nvim
 set -gx XDG_CONFIG_HOME $HOME/.config
 setpath $HOME/.local/bin
@@ -20,6 +18,11 @@ end
 
 # keybindings
 bind \cb backward-word
+bind \ct __fzf_search_current_dir
+
+# fzf
+set fzf_fd_opts --hidden --exclude=.git --exclude=node_modules
+set fzf_preview_dir_cmd exa --all --color=always
 
 # tide
 set -g tide_right_prompt_items
