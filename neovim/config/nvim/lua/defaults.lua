@@ -18,11 +18,17 @@ vim.o.cmdheight = 1
 vim.o.scrolloff = 8
 vim.o.clipboard = 'unnamedplus'
 vim.o.incsearch = true
-vim.o.inccommand = 'split' 
+vim.o.inccommand = 'split'
 vim.o.signcolumn = 'auto'
 vim.o.completeopt = 'menuone,noselect'
 vim.o.mouse = 'nvr'
+-- folds
+vim.wo.foldcolumn = '0'
+vim.wo.foldmethod = 'expr'
+vim.wo.foldexpr = 'nvim_treesitter#foldexpr()'
+vim.o.foldlevelstart = 99
 
+-- line numbers
 vim.wo.number = true
 vim.wo.relativenumber = true
 
