@@ -13,7 +13,7 @@ end
 
 if status is-interactive
 and not set -q TMUX
-    exec tmux -f ~/.config/tmux/tmux.conf
+  exec tmux -f ~/.config/tmux/tmux.conf
 end
 
 # keybindings
@@ -23,6 +23,11 @@ bind \ct __fzf_search_current_dir
 # fzf
 set fzf_fd_opts --hidden --exclude=.git --exclude=node_modules
 set fzf_preview_dir_cmd exa --all --color=always
+# for fzf.vim
+set -x FZF_DEFAULT_COMMAND fd --type f
 
 # tide
 set -g tide_right_prompt_items
+
+# keyboard repeat rate
+xset r rate 180 50

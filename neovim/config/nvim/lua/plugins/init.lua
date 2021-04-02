@@ -48,8 +48,11 @@ return require('packer').startup {
     -- tweak cursor hold performance
     use 'antoinemadec/FixCursorHold.nvim'
 
-    -- tpope stuff
+    -- commentarys
     use 'tpope/vim-commentary'
+    use 'JoosepAlviste/nvim-ts-context-commentstring'
+
+    -- must have tpope stuff
     use 'tpope/vim-surround'
     use 'tpope/vim-repeat'
 
@@ -60,7 +63,11 @@ return require('packer').startup {
     use 'mhinz/vim-startify'
 
     -- visual signs for VCS
-    use 'mhinz/vim-signify'
+    use {
+      'lewis6991/gitsigns.nvim',
+      requires = { 'nvim-lua/plenary.nvim' },
+      config = function() require('gitsigns').setup() end
+    }
 
     -- show marks on signcolumn
     use 'kshenoy/vim-signature'
@@ -106,14 +113,17 @@ return require('packer').startup {
     use 'mhinz/vim-grepper'
 
     -- fuzzyfinder
-    use {'junegunn/fzf', run = './install --all' }     -- Fuzzy Searcher
-    use {'junegunn/fzf.vim'}
+    use {'junegunn/fzf', run = './install --all' }
+    use 'junegunn/fzf.vim'
 
     -- fish shell scripts syntax
     use 'dag/vim-fish'
 
     -- treesitter syntax
     use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
+
+    -- typescript stuff
+    use 'windwp/nvim-ts-autotag'
 
     -- file explorer
     use {
