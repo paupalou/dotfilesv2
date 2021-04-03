@@ -87,7 +87,6 @@ apps:
     from: github
     repository: clangen/musikcube
     release: 0.96.4
-    suffix: ubuntu_focal
     depends:
       - 
         name: libboost-system1.71.0

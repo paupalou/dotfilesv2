@@ -283,7 +283,7 @@ function install_item {
       source ./script/$type.installer.from.$from.sh
     fi
 
-    _install_${type}_from_${from} "$name" "$repository" "$release" "$path" "$run" "$suffix" "$is_subitem" "$arch"
+    _install_${type}_from_${from} "$name" "$repository" "$release" "$path" "$run" "$is_subitem" "$arch"
   fi
 }
 
@@ -328,24 +328,6 @@ function is_package_installed {
 
 	print_dependency_success $package $version $is_subitem $is_last_item
 	return 0
-}
-
-function install_release_from_github {
-	local name=$1
-	local repository=$2
-	local version=$3
-	local suffix=$6
-
-	print_installing $name "github"
-
-	local package_file=${name}_${version}_${suffix}_amd64.deb
-
-	wget https://github.com/$repository/releases/download/$version/$package_file &>/dev/null
-
-	sudo dpkg -i $package_file 1>/dev/null
-	rm $package_file
-
-	echo $(pc "  ✓" $green$bold)
 }
 
 function install_source_from_github {

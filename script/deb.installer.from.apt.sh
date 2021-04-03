@@ -4,7 +4,7 @@ function _install_deb_from_apt {
 	local package_name=$1
 	local repository=$2
 	local run=$5
-	local is_package_dependency=$7
+	local is_package_dependency=$6
 
   local is_ppa_added=$(apt-cache policy | grep -q $repository)
 

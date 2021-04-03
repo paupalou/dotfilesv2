@@ -2,7 +2,7 @@ function _install_deb_from_github {
 	local package_name=$1
 	local repository=$2
 	local release=$3
-  local arch=$8
+  local arch=$7
 
 	print_installing $repository "github"
 
