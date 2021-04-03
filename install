@@ -1,43 +1,56 @@
 #!/bin/bash
 
-source ./script/installers
+source ./script/installers.sh
+source ./script/configs_linker.sh
 
-parse_software "./install.yml"
+function _show_usage {
+  printf "Usage: $0 [OPTION=PARAMETERS]\n"
+  printf "Utility to synchronize your deps, apps and configs\n"
+  printf "\n"
+  printf "${uline}Options:\n$normal"
+  print_help_option "-h, --help" "Print help"
+  print_help_option "-i, --install" "Install all groups in install.yml"
+  print_help_option "    --install=group" "Install only a group, must be defined in install.yml"
+  print_help_option "-c, --config" "Symlink all files inside directory"
+  print_help_option "-c, --config=directory" "Symlink specific directory"
+
+  return 0
+}
 
 if [[ ${#} -eq 0 ]]; then
-  install
-  symlink_files
+  _install
+  _symlink_files
 fi
 
 while getopts ":hic-:" option; do
   case "$option" in
     h)
-      show_usage
+      _show_usage
       exit;;
     i)
-      install
+      _install
       exit;;
     c)
-      symlink_files
+      _symlink_files
       exit;;
     -)
       case "${OPTARG}" in
         help)
-          show_usage
+          _show_usage
           ;;
         install)
-          install
+          _install
           ;;
         install=*)
           parameter=${OPTARG#*=}
-          install $parameter
+          _install $parameter
           ;;
         config)
-          symlink_files
+          _symlink_files
           ;;
         config=*)
           parameter=${OPTARG#*=}
-          symlink_files $parameter
+          _symlink_files $parameter
           ;;
         *)
           echo "Unkown option --${OPTARG}, use --help"

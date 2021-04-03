@@ -1,0 +1,153 @@
+function _link_file {
+  local src=$1 dst=$2 print_each_skipped_file=$4
+  local overwrite backup skip action
+
+  if [ -f "$dst" -o -d "$dst" ]; then
+
+    if [ "$overwrite_all" == "false" ] && [ "$backup_all" == "false" ] && [ "$skip_all" == "false" ]; then
+      local currentSrc="$(readlink $dst)"
+      if [ "$currentSrc" == "$src" ]; then
+        if  [ "$print_each_skipped_file" != "false" ]; then
+          success "skipped ${cyan}$src${normal}" "$3"
+        fi
+        return
+      else
+
+        user "${bold}$dst${normal} already exists, what to do?"
+        user_option "[${bold}s${normal}]kip ───────────── [${bold}S${normal}]kip all"
+        user_option "[${bold}o${normal}]verwrite ──────── [${bold}O${normal}]verwrite all"
+        user_option "[${bold}b${normal}]ackup ─────────── [${bold}B${normal}]ackup all?"
+        read -n 1 action
+
+        case "$action" in
+          o )
+            overwrite=true;;
+          O )
+            overwrite_all=true;;
+          b )
+            backup=true;;
+          B )
+            backup_all=true;;
+          s )
+            skip=true;;
+          S )
+            skip_all=true;;
+          * )
+            ;;
+        esac
+      fi
+    fi
+
+    overwrite=${overwrite:-$overwrite_all}
+    backup=${backup:-$backup_all}
+    skip=${skip:-$skip_all}
+
+    if [ "$overwrite" == "true" ]; then
+      rm -rf "$dst"
+      success "removed ${cyan}$dst${normal}" "$3"
+      ((file_counter-=1))
+    fi
+
+    if [ "$backup" == "true" ]; then
+      mv "$dst" "${dst}.backup"
+      success "moved   ${cyan}$dst${normal} to ${dst}.backup" "$3"
+      ((file_counter-=1))
+    fi
+
+    if [ "$skip" == "true" ]; then
+      success "skipped ${cyan}$src${normal}" "$3"
+    fi
+  fi
+
+  if [ "$skip" != "true" ]; then
+    ln -s "$src" "$dst"
+    success "linked  ${lgreen}$2${normal}" "$3"
+    ((file_counter-=1))
+  fi
+}
+
+
+function subfolder_files {
+  local topic=$1
+  local subfolder=$2
+  # verbose is true by default and only applies to 'skip' action
+  local verbose=${3:-'true'}
+
+  # contains number of files skipped and used only when verbose is false
+  local file_counter=0
+
+  local overwrite_all=false backup_all=false skip_all=false
+  for src in $(find -H $HOME/dotfiles/$topic/$subfolder -type f ! -path "*/.git/*" -type f ! -path "*/.*" -printf '%P\n')
+  do
+    local child_visual_line="──"
+    local src_dirname="/$(dirname "$src")"
+
+    # if we find symlink in first level assume src is 1st-child of $subfolder
+    # so we unset src_dirname to avoid adding a dot (.)
+    if [ $(dirname "$src") == "." ]; then
+      src_dirname=""
+    fi
+    # local destiny_directory="$HOME/.$topic/$subfolder$src_dirname"
+    local destiny_directory="$HOME/.$subfolder$src_dirname"
+    ((file_counter+=1))
+
+    # check if destiny directory exists , create if not
+    if [ ! -d $destiny_directory ]; then
+      warn "creating directory → $destiny_directory${normal}" '──'
+      mkdir -p "$destiny_directory"
+      # double visual line to make visual appearance as child of this directory
+      child_visual_line="──────"
+    fi
+
+    # build destiny with destiny_directory + file_name
+    dst="$destiny_directory/$(basename "${src}")"
+
+    # link the file
+    _link_file "$HOME/dotfiles/$topic/$subfolder/$src" "$dst" "$child_visual_line" "$verbose"
+  done
+
+  if [ $verbose == "false" ] && [ $file_counter -gt 0 ]; then
+    success "skipped ${cyan}$file_counter${normal} files" "$child_visual_line"
+  fi
+}
+
+function _not_match {
+  for i in ${@}; do
+    echo ! -name $i
+  done
+}
+
+function _symlink_files {
+  _start 'linking dotfiles'
+
+  local excluded_files=("path.fish")
+  local exclude_file_list=$(_not_match ${excluded_files[@]})
+
+  local files=$(find -H $HOME/dotfiles/ -mindepth 2 -maxdepth 2 -type f ! -path "*/.git/*" ! -path "*/script/*" $exclude_file_list)
+  local overwrite_all=false backup_all=false skip_all=false
+
+  local topics=$(find -H $HOME/dotfiles/ -mindepth 1 -maxdepth 1 -type d ! -path "*/.git" ! -path "*/script")
+
+  for src in $files; do
+    local dst="$HOME/.$(basename "${src%.*}")"
+    echo $src
+    echo $dst
+    _link_file $src $dst
+  done
+
+  for src in $(find $HOME/dotfiles/ -mindepth 2 -maxdepth 2 ! -path "*/.git/*" -type d -printf '%P\n' | sort)
+  do
+    local topic=$(dirname "$src")
+    local subfolder=$(basename "$src")
+
+    # print a title of this subfolder
+    subfolder_title $bold$topic $normal$subfolder
+
+    # link files inside subfolders
+    # last argument is verbose, if you pass false a compact message will be printed
+    subfolder_files $topic $subfolder false
+  done
+
+  _end
+}
+

@@ -1,3 +1,5 @@
+#!/bin/bash
+
 function _install_deb_from_ubuntu_archive {
 	local package_name=$1
 	local repository=$2
