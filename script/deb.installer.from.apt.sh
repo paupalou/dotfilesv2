@@ -1,18 +1,22 @@
+#!/bin/bash
+
 function _install_deb_from_apt {
 	local package_name=$1
 	local repository=$2
 	local run=$5
 	local is_package_dependency=$7
 
-  local is_ppa_added = $(apt-cache policy | grep -q $repository)
+  local is_ppa_added=$(apt-cache policy | grep -q $repository)
 
 	if [ -n "$repository" ]; then
 		if [ -z $is_ppa_added ]; then
-      print_adding_repository $1
-      sudo add-apt-repository ppa:$1 -y 1>/dev/null
+      print_adding_repository $repository
+      sudo add-apt-repository ppa:$repository -y 1>/dev/null
+      sudo apt-get update -y
       echo $(pc "  ✓" $green$bold)
 		fi
-	f
+  fi
+
 	if [ -n "$run" ]; then
 		_run_command "$run"
 	fi

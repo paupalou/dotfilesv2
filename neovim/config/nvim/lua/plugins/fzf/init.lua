@@ -1,3 +1,4 @@
+vim.cmd [[packadd fzf.vim]]
 require 'plugins.fzf.bindings'
 
 vim.g.fzf_action = {

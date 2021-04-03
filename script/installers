@@ -232,7 +232,7 @@ function _is_installer_loaded {
   fi
 
   false
-  return 0
+  return
 }
 
 function install_item {
@@ -281,13 +281,13 @@ function install_item {
 	fi
 
 	if [ "$should_install" = true ]; then
-    if ! _is_installer_loaded $type; then
+    if ! _is_installer_loaded $type $from; then
       echo $type installer not loaded!
       echo loading installer...
       source ./script/$type.installer.from.$from.sh
     fi
 
-    install_${type}_from_${from} "$name" "$repository" "$release" "$path" "$run" "$suffix" "$is_subitem" "$arch"
+    _install_${type}_from_${from} "$name" "$repository" "$release" "$path" "$run" "$suffix" "$is_subitem" "$arch"
   fi
 }
 

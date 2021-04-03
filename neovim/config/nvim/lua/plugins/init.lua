@@ -113,7 +113,7 @@ return require('packer').startup {
     use 'mhinz/vim-grepper'
 
     -- fuzzyfinder
-    use {'junegunn/fzf', run = './install --all' }
+    use { '~/.fzf', as = 'fzf' }
     use 'junegunn/fzf.vim'
 
     -- fish shell scripts syntax
