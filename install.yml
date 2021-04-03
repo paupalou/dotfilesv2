@@ -53,7 +53,7 @@ apps:
     repository: junegunn/fzf
     path: $HOME/.fzf
     bin: $HOME/.fzf/bin/fzf
-    run: install --no-update-rc
+    run: install --no-update-rc --no-completion --no-key-bindings
   - 
     name: nodejs
     run: "curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -"

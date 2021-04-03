@@ -3,14 +3,14 @@
 source ./script/yaml_parser.sh
 source ./script/print_utils.sh
 
-function check_sudo {
+function _check_sudo {
   if ! command -v sudo &> /dev/null; then
     echo "sudo is not installed, install it (as root)"
     exit 1
   fi
 }
 
-function set_localtime {
+function _set_localtime {
   local localtime_file=/etc/localtime
   if [ ! -f "$localtime" ]; then
     local TZ=Europe/Madrid
@@ -20,8 +20,8 @@ function set_localtime {
 
 function _install {
   eval $(parse_yaml install.yml)
-  check_sudo
-  set_localtime
+  _check_sudo
+  _set_localtime
   local category_group
 
   if [ -z "$1" ]; then
@@ -35,7 +35,7 @@ function _install {
   done
 }
 
-function get_value {
+function _get_value {
   local prop=$1_$2
   local value=${!prop}
   if [ -n "$value" ]; then
@@ -65,22 +65,22 @@ function _is_installer_loaded {
   return
 }
 
-function install_item {
+function _install_item {
   local item=$1
   local is_subitem=$2
   local is_last_item=$3
   local should_install=true
 
-  local name=$(get_value $item "name")
-  local from=$(get_value $item "from" $package_manager)
-  local type=$(get_value $item "type" $package_type)
-  local arch=$(get_value $item "arch" $package_arch)
-  local bin=$(get_value $item "bin")
-  local repository=$(get_value $item "repository")
-  local release=$(get_value $item "release")
-  local path=$(get_value $item "path")
-  local run=$(get_value $item "run")
-  local suffix=$(get_value $item "suffix")
+  local name=$(_get_value $item "name")
+  local from=$(_get_value $item "from" $package_manager)
+  local type=$(_get_value $item "type" $package_type)
+  local arch=$(_get_value $item "arch" $package_arch)
+  local bin=$(_get_value $item "bin")
+  local repository=$(_get_value $item "repository")
+  local release=$(_get_value $item "release")
+  local path=$(_get_value $item "path")
+  local run=$(_get_value $item "run")
+  local suffix=$(_get_value $item "suffix")
 
   if ! _is_checker_loaded $type; then
     local checker=./script/$type.checker.sh
@@ -104,7 +104,7 @@ function install_item {
       if [ "$index" -gt "$num_deps" ];then
         is_last_item=true
       fi
-      install_item $dependency true $is_last_item
+      _install_item $dependency true $is_last_item
     done
   fi
 
@@ -127,7 +127,7 @@ function _install_category_items {
   _start $category
 
   for item in ${!items}; do
-    install_item $item
+    _install_item $item
   done
 
   _end $category
