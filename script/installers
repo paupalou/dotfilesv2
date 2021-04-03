@@ -253,8 +253,6 @@ function install_item {
 	local suffix=$(get_value $item "suffix")
 
   if ! _is_checker_loaded $type; then
-    echo $type checker not loaded!
-    echo loading checker...
     local checker=./script/$type.checker.sh
     if [ -f "$checker" ]; then
       source $checker
@@ -282,8 +280,6 @@ function install_item {
 
 	if [ "$should_install" = true ]; then
     if ! _is_installer_loaded $type $from; then
-      echo $type installer not loaded!
-      echo loading installer...
       source ./script/$type.installer.from.$from.sh
     fi
 
