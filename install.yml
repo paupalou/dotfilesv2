@@ -87,6 +87,7 @@ apps:
     from: github
     repository: clangen/musikcube
     release: 0.96.4
+    arch: ubuntu_focal_amd64
     depends:
       - 
         name: libboost-system1.71.0
@@ -106,7 +107,3 @@ apps:
         name: libavcodec-extra
       -
         name: pulseaudio
-
-test:
-  -
-    name: ranger

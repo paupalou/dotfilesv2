@@ -1,10 +1,10 @@
 function _install_deb_from_github {
-	local package_name=$1
-	local repository=$2
-	local release=$3
+  local package_name=$1
+  local repository=$2
+  local release=$3
   local arch=$7
 
-	print_installing $repository "github"
+  print_installing $repository "github"
 
   local package_file=${package_name}_${release}_${arch}.deb
 
@@ -22,11 +22,11 @@ function _install_deb_from_github {
   fi
 
 
-	wget https://github.com/$repository/releases/download/$release/$package_file &>/dev/null
+  wget https://github.com/$repository/releases/download/$release/$package_file &>/dev/null
 
-	sudo dpkg -i $package_file 1>/dev/null
-	rm $package_file
+  sudo dpkg -i $package_file 1>/dev/null
+  rm $package_file
 
-	echo $(pc "  ✓" $green$bold)
+  echo $(pc "  ✓" $green$bold)
 }
 
