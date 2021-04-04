@@ -86,6 +86,7 @@ function _install_item {
       pre_hooks=$(_get_value $hook "pre")
       post_hooks=$(_get_value $hook "post")
     done
+    echo post $post_hooks
   fi
 
   if [ "$should_install" = true ]; then
