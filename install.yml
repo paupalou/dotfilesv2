@@ -78,7 +78,7 @@ apps:
     type: binary
     path: $HOME/.local/kitty.app
     bin: $HOME/.local/kitty.app/bin/kitty
-    run: "curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin"
+    run: "curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin \launch=n"
     hooks:
       -
         post: "mkdir -p ~/.terminfo/x && ln -s ~/.local/kitty.app/share/terminfo/x/xterm-kitty ~/.terminfo/x"
