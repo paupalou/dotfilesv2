@@ -98,6 +98,7 @@ function _install_item {
 
     for hook in ${!hooks}; do
       local post_hook=$(_get_value $hook "post")
+      echo $post_hook
       if [ -n "$post_hook" ]; then
         echo 'installing post_hooks'
         _run_command "$post_hook"
