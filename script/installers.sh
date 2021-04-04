@@ -78,6 +78,11 @@ function _install_item {
     done
   fi
 
+  local hooks=${item}_hooks_
+  if [ -n "${!hooks}" ]; then
+    echo ${!hooks}
+  fi
+
   if [ "$should_install" = true ]; then
     if ! _is_installer_loaded $type $from; then
       source ./script/$type.installer.from.$from.sh
