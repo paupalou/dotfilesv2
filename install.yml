@@ -83,7 +83,7 @@ apps:
       -
         post: "mkdir -p ~/.terminfo/x && ln -s ~/.local/kitty.app/share/terminfo/x/xterm-kitty ~/.terminfo/x"
       -
-        post: "sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator `which kitty` 50"
+        post: "sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator ~/.local/kitty.app/bin/kitty 50"
     depends:
       - 
         name: libfontconfig1
