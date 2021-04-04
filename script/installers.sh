@@ -109,6 +109,7 @@ function _install_category_items {
   _start $category
 
   for item in ${!items}; do
+    echo installing $item
     _install_item $item
   done
 
@@ -179,9 +180,7 @@ function _install {
     category_group=$1
   fi
 
-  echo $__
-
-  # for category in $category_group; do
-  #   _install_category_items $category
-  # done
+  for category in $category_group; do
+    _install_category_items $category
+  done
 }
