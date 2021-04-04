@@ -91,9 +91,9 @@ function _install_item {
   fi
 
   if [ "$should_install" = true ]; then
-    if ! _is_installer_loaded $type $from; then
-      source ./script/$type.installer.from.$from.sh
-    fi
+    # if ! _is_installer_loaded $type $from; then
+    #   source ./script/$type.installer.from.$from.sh
+    # fi
 
     _install_${type}_from_${from} "$name" "$repository" "$release" "$path" "$run" "$is_subitem" "$arch"
   fi
@@ -109,7 +109,6 @@ function _install_category_items {
   _start $category
 
   for item in ${!items}; do
-    echo installing $item
     _install_item $item
   done
 
