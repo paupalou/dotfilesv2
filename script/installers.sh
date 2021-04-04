@@ -98,6 +98,7 @@ function _install_item {
 
   fi
 
+    local hooks=${item}_hooks_
     for hook in ${!hooks}; do
       local post_hook=$(_get_value $hook "post")
       echo $post_hook
