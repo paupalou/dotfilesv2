@@ -99,6 +99,7 @@ function _install_item {
 
     _install_${type}_from_${from} "$name" "$repository" "$release" "$path" "$run" "$is_subitem" "$arch"
 
+    echo $post_hooks
     if [ -n "$post_hooks" ]; then
       echo 'installing post_hooks'
     fi
