@@ -82,6 +82,8 @@ function _install_item {
   local pre_hooks
   local post_hooks
   if [ -n "${!hooks}" ]; then
+    local num_hooks=$(echo "${!dependencys}" | wc -w)
+    echo $num_hooks
     for hook in ${!hooks}; do
       pre_hooks=$(_get_value $hook "pre")
       post_hooks=$(_get_value $hook "post")
