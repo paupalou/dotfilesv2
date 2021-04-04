@@ -95,6 +95,7 @@ function _install_item {
     #   source ./script/$type.installer.from.$from.sh
     # fi
 
+    echo installing $type $from
     _install_${type}_from_${from} "$name" "$repository" "$release" "$path" "$run" "$is_subitem" "$arch"
   fi
 }
@@ -148,7 +149,7 @@ function _install_source_from_github {
   local destination_path=$4
   local run=$5
 
-  # print_installing $name "github"
+  print_installing $name "github"
   git clone --depth 1 https://github.com/${repository}.git ${destination_path} &>/dev/null
   command $destination_path/$run &>/dev/null
 
