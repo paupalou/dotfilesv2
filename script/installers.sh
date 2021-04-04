@@ -80,7 +80,9 @@ function _install_item {
 
   local hooks=${item}_hooks_
   if [ -n "${!hooks}" ]; then
-    echo ${!hooks}
+    for hook in ${!hooks}; do
+      echo ${hook}
+    done
   fi
 
   if [ "$should_install" = true ]; then
