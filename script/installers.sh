@@ -78,37 +78,31 @@ function _install_item {
     done
   fi
 
-  local hooks=${item}_hooks_
-  local pre_hooks
-  local post_hooks
-  if [ -n "${!hooks}" ]; then
-    local num_hooks=$(echo "${!hooks}" | wc -w)
-    echo $num_hooks
-    for hook in ${!hooks}; do
-      pre_hooks=$(_get_value $hook "pre")
-      post_hooks=$(_get_value $hook "post")
-      echo $post_hooks
-      # for post_hook in ${!post_hooks}; do
-      #   echo post $post_hook
-      # done
-    done
-  fi
 
   if [ "$should_install" = true ]; then
     if ! _is_installer_loaded $type $from; then
       source ./script/$type.installer.from.$from.sh
     fi
 
-    if [ -n "$pre_hooks" ]; then
-      echo 'installing pre_hooks'
-    fi
+    local hooks=${item}_hooks_
+
+    for hook in ${!hooks}; do
+      local pre_hook=$(_get_value $hook "pre")
+      if [ -n "$pre_hooks" ]; then
+        echo 'installing pre_hooks'
+        _run_command "$pre_hook"
+      fi
+    done
 
     _install_${type}_from_${from} "$name" "$repository" "$release" "$path" "$run" "$is_subitem" "$arch"
 
-    echo $post_hooks
-    if [ -n "$post_hooks" ]; then
-      echo 'installing post_hooks'
-    fi
+    for hook in ${!hooks}; do
+      local post_hook=$(_get_value $hook "post")
+      if [ -n "$pre_hooks" ]; then
+        echo 'installing post_hooks'
+        _run_command "$post_hook"
+      fi
+    done
   fi
 }
 
