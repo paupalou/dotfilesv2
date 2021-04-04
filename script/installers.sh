@@ -85,8 +85,10 @@ function _install_item {
     for hook in ${!hooks}; do
       pre_hooks=$(_get_value $hook "pre")
       post_hooks=$(_get_value $hook "post")
+      for post_hook in ${!post_hooks}; do
+        echo post $post_hook
+      done
     done
-    echo post $post_hooks
   fi
 
   if [ "$should_install" = true ]; then
