@@ -18,23 +18,6 @@ function _set_localtime {
   fi
 }
 
-function _install {
-  eval $(parse_yaml install.yml)
-  _check_sudo
-  _set_localtime
-  local category_group
-
-  if [ -z "$1" ]; then
-    category_group=$__
-  else
-    category_group=$1
-  fi
-
-  for category in $category_group; do
-    _install_category_items $category
-  done
-}
-
 function _get_value {
   local prop=$1_$2
   local value=${!prop}
@@ -165,7 +148,7 @@ function _install_source_from_github {
   local destination_path=$4
   local run=$5
 
-  print_installing $name "github"
+  # print_installing $name "github"
   git clone --depth 1 https://github.com/${repository}.git ${destination_path} &>/dev/null
   command $destination_path/$run &>/dev/null
 
@@ -181,4 +164,21 @@ function _install_binary_from_curl {
   _run_command "$run"
 
   echo $(pc "  ✓" $green$bold)
+}
+
+function _install {
+  eval $(parse_yaml install.yml)
+  _check_sudo
+  _set_localtime
+  local category_group
+
+  if [ -z "$1" ]; then
+    category_group=$__
+  else
+    category_group=$1
+  fi
+
+  for category in $category_group; do
+    _install_category_items $category
+  done
 }
