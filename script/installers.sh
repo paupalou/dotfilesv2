@@ -29,23 +29,11 @@ function _get_value {
 }
 
 function _is_checker_loaded {
-  if $(declare -f _is_${1}_installed); then
-    true
-    return
-  fi
-
-  false
-  return
+  declare -F "_is_${1}_installed" > /dev/null
 }
 
 function _is_installer_loaded {
-  if $(declare -f _install_${1}_from_${2}); then
-    true
-    return
-  fi
-
-  false
-  return
+  declare -F "_install_${1}_from_${2}" > /dev/null
 }
 
 function _install_item {
@@ -91,11 +79,10 @@ function _install_item {
   fi
 
   if [ "$should_install" = true ]; then
-    # if ! _is_installer_loaded $type $from; then
-    #   source ./script/$type.installer.from.$from.sh
-    # fi
+    if ! _is_installer_loaded $type $from; then
+      source ./script/$type.installer.from.$from.sh
+    fi
 
-    echo installing $type $from
     _install_${type}_from_${from} "$name" "$repository" "$release" "$path" "$run" "$is_subitem" "$arch"
   fi
 }
