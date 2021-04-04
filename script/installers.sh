@@ -89,7 +89,6 @@ function _install_item {
     for hook in ${!hooks}; do
       local pre_hook=$(_get_value $hook "pre")
       if [ -n "$pre_hook" ]; then
-        echo 'installing pre_hooks'
         _run_command "$pre_hook"
       fi
     done
@@ -98,7 +97,6 @@ function _install_item {
 
     for hook in ${!hooks}; do
       local post_hook=$(_get_value $hook "post")
-      echo $post_hook
       if [ -n "$post_hook" ]; then
         _run_command "$post_hook"
       fi
