@@ -96,6 +96,8 @@ function _install_item {
 
     _install_${type}_from_${from} "$name" "$repository" "$release" "$path" "$run" "$is_subitem" "$arch"
 
+  fi
+
     for hook in ${!hooks}; do
       local post_hook=$(_get_value $hook "post")
       echo $post_hook
@@ -104,7 +106,6 @@ function _install_item {
         _run_command "$post_hook"
       fi
     done
-  fi
 }
 
 function _install_category_items {
