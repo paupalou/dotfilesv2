@@ -146,7 +146,6 @@ function _install_source_from_github {
 function _install_binary_from_curl {
   local name=$1
   local run=$5
-  echo installing $1 $2 $3 $4 $5 $6 $7
 
   print_installing $name "curl"
 

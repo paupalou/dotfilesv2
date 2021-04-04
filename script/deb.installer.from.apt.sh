@@ -7,7 +7,6 @@ function _install_deb_from_apt {
   local is_package_dependency=$6
 
   if [ -n "$repository" ]; then
-    echo $repository
     local is_ppa_added=$(apt-cache policy | grep -q $repository)
     if [ -z $is_ppa_added ]; then
       print_adding_repository $repository
