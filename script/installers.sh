@@ -160,7 +160,7 @@ function _install_binary_from_curl {
   local run=$5
   echo installing $1 $2 $3 $4 $5 $6 $7
 
-  # print_installing $name "curl"
+  print_installing $name "curl"
 
   _run_command "$run"
 
