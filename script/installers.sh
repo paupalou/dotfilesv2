@@ -85,6 +85,7 @@ function _install_item {
     for hook in ${!hooks}; do
       pre_hooks=$(_get_value $hook "pre")
       post_hooks=$(_get_value $hook "post")
+      echo $post_hooks
       for post_hook in ${!post_hooks}; do
         echo post $post_hook
       done
