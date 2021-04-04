@@ -80,7 +80,6 @@ function _install_item {
   local release=$(_get_value $item "release")
   local path=$(_get_value $item "path")
   local run=$(_get_value $item "run")
-  local suffix=$(_get_value $item "suffix")
 
   if ! _is_checker_loaded $type; then
     local checker=./script/$type.checker.sh
