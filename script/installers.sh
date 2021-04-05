@@ -139,8 +139,7 @@ function _is_package_installed {
       version=$(_is_${type}_installed $package)
     fi
   else
-    local cmd=$(${version_cmd})
-    version="$(echo $cmd | head -1 | grep -o -e '[0-9]\+\(\.[0-9]\+\)*' | head -1)"
+    version="$(eval $versioncmd | head -1 | grep -o -e '[0-9]\+\(\.[0-9]\+\)*' | head -1)"
   fi
 
   if [ -z "$version" ]; then
