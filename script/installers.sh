@@ -42,7 +42,7 @@ function _install_item {
 	local is_last_item=$3
 	local should_install=true
 
-	local name=$(_get_value $item "name")
+	local name=$(_get_value $item "name" ${!item})
 	local from=$(_get_value $item "from" $package_manager)
 	local type=$(_get_value $item "type" $package_type)
 	local arch=$(_get_value $item "arch" $package_arch)

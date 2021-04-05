@@ -3,77 +3,57 @@ package_type: deb
 package_arch: amd64
 
 dependencies:
-  -
-    name: apt-utils 
-  -
-    name: curl 
-  -
-    name: wget
-  -
-    name: software-properties-common
+  - apt-utils
+  - curl
+  - wget
+  - software-properties-common
     run: "sudo apt-get update -y"
-  - 
-    name: git 
+  - git
 
 apps:
-  -
-    name: fish
+  - fish
     repository: fish-shell/release-3
   # -
   #   name: neovim
   #   from: apt
-  #   repository: neovim-ppa/unstable
-  -
-    name: firefox
-  -
-    name: lazygit
+  #   repository:neovim-ppa/unstable
+  - firefox
+  - lazygit
     repository: lazygit-team/release
-  -
-    name: ranger
-  -
-    name: tmux
-  -
-    name: mpv
-  - 
-    name: fd
+  - ranger
+  - tmux
+  - mpv
+  - fd
     from: github
     repository: sharkdp/fd
-  -
-    name: bat
+  - bat
     from: github
     repository: sharkdp/bat
-  - 
-    name: ripgrep
+  - ripgrep
     from: github
     repository: BurntSushi/ripgrep
-  -
-    name: fzf
+  - fzf
     from: github
     type: source
     repository: junegunn/fzf
     path: $HOME/.fzf
     bin: $HOME/.fzf/bin/fzf
     run: install --no-update-rc --no-completion --no-key-bindings
-  - 
-    name: nodejs
+  - nodejs
     run: "curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -"
-  -
-    name: exa
+  - exa
     from: ubuntu_archive
     repository: r/rust-exa
     version: 0.9.0-4
-  -
-    name: youtube-dl
+  - youtube-dl
     from: curl
     type: binary
     path: $HOME/.local/bin
     bin: $HOME/.local/bin/youtube-dl
-    run:  "curl -L https://yt-dl.org/downloads/latest/youtube-dl --create-dirs -o $HOME/.local/bin/youtube-dl && chmod a+rx $HOME/.local/bin/youtube-dl"
+    run: "curl -L https://yt-dl.org/downloads/latest/youtube-dl --create-dirs -o $HOME/.local/bin/youtube-dl && chmod a+rx $HOME/.local/bin/youtube-dl"
     depends:
-      - 
-        name: python-is-python3
-  - 
-    name: kitty
+      -  python-is-python3
+  - kitty
     from: curl
     type: binary
     path: $HOME/.local/kitty.app
@@ -88,30 +68,19 @@ apps:
       - "mkdir -p ~/.terminfo/x && ln -s ~/.local/kitty.app/share/terminfo/x/xterm-kitty ~/.terminfo/x"
       - "sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator ~/.local/kitty.app/bin/kitty 50"
     depends:
-      - 
-        name: libfontconfig1
-  - 
-    name: musikcube
+      - libfontconfig1
+  - musikcube
     from: github
     repository: clangen/musikcube
     release: 0.96.4
     arch: ubuntu_focal_amd64
     depends:
-      - 
-        name: libboost-system1.71.0
-      - 
-        name: libboost-filesystem1.71.0
-      - 
-        name: libboost-thread1.71.0
-      -
-        name: libboost-chrono1.71.0
-      -
-        name: libboost-date-time1.71.0
-      -
-        name: libmicrohttpd12
-      -
-        name: libev4
-      -
-        name: libavcodec-extra
-      -
-        name: pulseaudio
+      - libboost-system1.71.0
+      - libboost-filesystem1.71.0
+      - libboost-thread1.71.0
+      - libboost-chrono1.71.0
+      - libboost-date-time1.71.0
+      - libmicrohttpd12
+      - libev4
+      - libavcodec-extra
+      - pulseaudio

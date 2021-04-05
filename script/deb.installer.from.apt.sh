@@ -11,7 +11,7 @@ function _install_deb_from_apt {
     if [ -z $is_ppa_added ]; then
       print_adding_repository $repository
       sudo add-apt-repository ppa:$repository -y 1>/dev/null
-      sudo apt-get update -y
+      sudo apt-get update -y 1>/dev/null
       echo $(pc "  ✓" $green$bold)
     fi
   fi
