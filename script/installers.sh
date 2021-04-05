@@ -159,7 +159,9 @@ function _install_source_from_github {
 
   print_installing $name "github"
   git clone --depth 1 https://github.com/${repository}.git ${destination_path} &>/dev/null
-  command $destination_path/$run &>/dev/null
+  cd $destination_path
+  _run_command $run
+  cd -
 
   echo $(pc "  ✓" $green$bold)
 }
