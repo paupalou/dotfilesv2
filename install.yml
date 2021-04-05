@@ -13,10 +13,8 @@ dependencies:
 apps:
   - fish
     repository: fish-shell/release-3
-  # -
-  #   name: neovim
-  #   from: apt
-  #   repository:neovim-ppa/unstable
+  #- neovim
+  #  repository:neovim-ppa/unstable
   - firefox
   - lazygit
     repository: lazygit-team/release
@@ -37,8 +35,14 @@ apps:
     type: source
     repository: junegunn/fzf
     path: $HOME/.fzf
-    bin: $HOME/.fzf/bin/fzf
     run: install --no-update-rc --no-completion --no-key-bindings
+  - fisher
+    from: curl
+    type: binary
+    version_cmd: "fish -c 'fisher --version'"
+    run: "fish -c 'curl -sL https://git.io.fisher | source && fisher install jorgebucaran/fisher'"
+    post:
+      - "fish -c 'fisher update'"
   - nodejs
     run: "curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -"
   - exa
@@ -49,7 +53,6 @@ apps:
     from: curl
     type: binary
     path: $HOME/.local/bin
-    bin: $HOME/.local/bin/youtube-dl
     run: "curl -L https://yt-dl.org/downloads/latest/youtube-dl --create-dirs -o $HOME/.local/bin/youtube-dl && chmod a+rx $HOME/.local/bin/youtube-dl"
     depends:
       -  python-is-python3
@@ -57,7 +60,6 @@ apps:
     from: curl
     type: binary
     path: $HOME/.local/kitty.app
-    bin: $HOME/.local/kitty.app/bin/kitty
     run: "curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin \launch=n"
     pre:
       - "wget -P ~/.local/share/fonts https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/VictorMono/Semi-Bold/complete/Victor%20Mono%20SemiBold%20Nerd%20Font%20Complete%20Mono.ttf?raw=true"
