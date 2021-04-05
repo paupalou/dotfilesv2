@@ -133,7 +133,7 @@ function _is_package_installed {
         source $checker
         version=$(_is_${type}_installed $package)
       else
-        version="$($package --version | head -1 | grep -o -e '[0-9]\+\(\.[0-9]\+\)*' | head -1)"
+        version="$($package --version 2>/dev/null | head -1 | grep -o -e '[0-9]\+\(\.[0-9]\+\)*' | head -1)"
       fi
     else
       version=$(_is_${type}_installed $package)

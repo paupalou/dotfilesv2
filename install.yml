@@ -2,19 +2,21 @@ package_manager: apt
 package_type: deb
 package_arch: amd64
 
-dependencies:
+system:
   - apt-utils
   - curl
   - wget
   - software-properties-common
     run: "sudo apt-get update -y"
   - git
-
-apps:
   - fish
     repository: fish-shell/release-3
+
+apps:
   - node
     run: "curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -"
+    type: deb
+    from: curl
     post:
       - "sudo chown -R $(whoami):$(whoami) /usr/lib/node_modules"
       - "npm install -g neovim"
