@@ -13,10 +13,9 @@ system:
     repository: fish-shell/release-3
 
 apps:
-  - node
-    run: "curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -"
-    type: deb
-    from: curl
+  - nodejs
+    pre:
+      - "curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -"
     post:
       - "sudo chown -R $(whoami):$(whoami) /usr/lib/node_modules"
       - "npm install -g neovim"
@@ -31,7 +30,7 @@ apps:
   - cargo
     type: binary
     from: curl
-    run: "curl https://sh.rustup.rs -sSf | sh"
+    run: "curl https://sh.rustup.rs -sSf | sh -s -- -y"
     post:
       - "rustup component add rls rust-analysis rust-src rustfmt clippy"
   - neovim
