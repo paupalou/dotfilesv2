@@ -79,19 +79,14 @@ apps:
     path: $HOME/.local/kitty.app
     bin: $HOME/.local/kitty.app/bin/kitty
     run: "curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin \launch=n"
-    hooks:
-      -
-        pre: "wget -P ~/.local/share/fonts https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/VictorMono/Semi-Bold/complete/Victor%20Mono%20SemiBold%20Nerd%20Font%20Complete%20Mono.ttf?raw=true"
-      -
-        pre: "wget -P ~/.local/share/fonts https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/VictorMono/Semi-Bold-Italic/complete/Victor%20Mono%20SemiBold%20Italic%20Nerd%20Font%20Complete%20Mono.ttf?raw=true"
-      -
-        pre: "wget -P ~/.local/share/fonts https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/VictorMono/Bold/complete/Victor%20Mono%20Bold%20Nerd%20Font%20Complete%20Mono.ttf?raw=true"
-      -
-        pre: "wget -P ~/.local/share/fonts https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/VictorMono/Bold-Italic/complete/Victor%20Mono%20Bold%20Italic%20Nerd%20Font%20Complete%20Mono.ttf?raw=true"
-      -
-        post: "mkdir -p ~/.terminfo/x && ln -s ~/.local/kitty.app/share/terminfo/x/xterm-kitty ~/.terminfo/x"
-      -
-        post: "sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator ~/.local/kitty.app/bin/kitty 50"
+    pre:
+      - "wget -P ~/.local/share/fonts https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/VictorMono/Semi-Bold/complete/Victor%20Mono%20SemiBold%20Nerd%20Font%20Complete%20Mono.ttf?raw=true"
+      - "wget -P ~/.local/share/fonts https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/VictorMono/Semi-Bold-Italic/complete/Victor%20Mono%20SemiBold%20Italic%20Nerd%20Font%20Complete%20Mono.ttf?raw=true"
+      - "wget -P ~/.local/share/fonts https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/VictorMono/Bold/complete/Victor%20Mono%20Bold%20Nerd%20Font%20Complete%20Mono.ttf?raw=true"
+      - "wget -P ~/.local/share/fonts https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/VictorMono/Bold-Italic/complete/Victor%20Mono%20Bold%20Italic%20Nerd%20Font%20Complete%20Mono.ttf?raw=true"
+    post:
+      - "mkdir -p ~/.terminfo/x && ln -s ~/.local/kitty.app/share/terminfo/x/xterm-kitty ~/.terminfo/x"
+      - "sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator ~/.local/kitty.app/bin/kitty 50"
     depends:
       - 
         name: libfontconfig1
