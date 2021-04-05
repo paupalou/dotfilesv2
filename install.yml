@@ -40,8 +40,9 @@ apps:
     from: curl
     type: binary
     version_cmd: "fish -c 'fisher --version'"
-    run: "fish -c 'curl -sL https://git.io.fisher | source && fisher install jorgebucaran/fisher'"
+    run: "fish -c 'curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher'"
     post:
+      - "ln -s $(pwd)/fish/config/fish/fish_plugins ~/.config/fish"
       - "fish -c 'fisher update'"
   - nodejs
     run: "curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -"
