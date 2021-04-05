@@ -135,6 +135,8 @@ function _is_package_installed {
       else
         version="$($package --version | head -1 | grep -o -e '[0-9]\+\(\.[0-9]\+\)*' | head -1)"
       fi
+    else
+      version=$(_is_${type}_installed $package)
     fi
   else
     version="$($version_cmd | head -1 | grep -o -e '[0-9]\+\(\.[0-9]\+\)*' | head -1)"
