@@ -13,8 +13,27 @@ dependencies:
 apps:
   - fish
     repository: fish-shell/release-3
-  #- neovim
-  #  repository:neovim-ppa/unstable
+  - neovim
+    type: source
+    from: github
+    repository: neovim/neovim
+    path: $HOME/code/external/neovim
+    version_cmd: "nvim --version"
+    pre:
+      - "mkdir -p $HOME/code/external"
+    run: "make CMAKE_BUILD_TYPE=RelWithDebInfo && sudo make install"
+    depends:
+      - make
+      - cmake
+      - ninja-build
+      - gettext
+      - libtool
+      - libtool-bin
+      - autoconf
+      - automake
+      - g++
+      - pkg-config
+      - unzip
   - firefox
   - lazygit
     repository: lazygit-team/release
