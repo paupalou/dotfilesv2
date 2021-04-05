@@ -17,16 +17,9 @@ apps:
     pre:
       - "curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -"
     post:
-      - "sudo chown -R $(whoami):$(whoami) /usr/lib/node_modules"
-      - "npm install -g neovim"
-      - "npm install -g tree-sitter-cli"
-      - "npm install -g typescript typescript-language-server"
-      - "npm install -g vim-language-server"
-      - "npm install -g bash-language-server"
-      - "npm install -g dockerfile-language-server-nodejs"
-      - "npm install -g vscode-html-languageserver-bin"
-      - "npm install -g vscode-json-languageserver"
-      - "npm install -g graphql-language-service-cli"
+      - "sudo npm install -g neovim"
+      - "sudo npm install -g tree-sitter-cli"
+      - "sudo npm install -g typescript typescript-language-server vim-language-server bash-language-server dockerfile-language-server-nodejs vscode-html-languageserver-bin vscode-json-languageserver graphql-language-service-cli"
   - cargo
     type: binary
     from: curl
