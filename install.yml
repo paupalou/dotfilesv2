@@ -24,9 +24,9 @@ apps:
       - "npm install -g vim-language-server"
       - "npm install -g bash-language-server"
       - "npm install -g dockerfile-language-server-nodejs"
-      - "npm install vscode-html-languageserver-bin"
-      - "npm install vscode-json-languageserver"
-      - "npm install graphql-language-service-cli"
+      - "npm install -g vscode-html-languageserver-bin"
+      - "npm install -g vscode-json-languageserver"
+      - "npm install -g graphql-language-service-cli"
   - cargo
     type: binary
     from: curl
