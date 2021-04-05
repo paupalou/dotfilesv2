@@ -154,13 +154,13 @@ function _is_package_installed {
 function _install_source_from_github {
   local name=$1
   local repository=$2
-  local destination_path=$4
+  local source_path=$4
   local run=$5
 
   print_installing $name "github"
-  git clone --depth 1 https://github.com/${repository}.git ${destination_path} &>/dev/null
-  cd $destination_path
-  _run_command $run
+  git clone --depth 1 https://github.com/${repository}.git ${source_path} &>/dev/null
+  cd $source_path
+  _run_command "$run"
   cd -
 
   echo $(pc "  ✓" $green$bold)
