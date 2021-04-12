@@ -13,7 +13,7 @@ apps:
   - tmux
   - firefox
   - fd
-  - bad
+  - bat
   - ripgrep
   - fzf
   - kitty
