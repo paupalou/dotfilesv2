@@ -10,12 +10,30 @@ system:
   - fish
 
 apps:
+  - nodejs-lts-fermium
+    post:
+      - "sudo npm install -g neovim"
+      - "sudo npm install -g tree-sitter-cli"
+      - "sudo npm install -g typescript typescript-language-server vim-language-server bash-language-server dockerfile-language-server-nodejs vscode-html-languageserver-bin vscode-json-languageserver graphql-language-service-cli"
+  - rustup
+    post:
+      - "rustup component add cargo rls rust-analysis rust-src rustfmt clippy"
   - tmux
   - firefox
+  - ripgrep
   - fd
+  - exa
   - bat
   - ripgrep
   - fzf
+  - fisher
+    from: curl
+    type: binary
+    version_cmd: "fish -c 'fisher --version'"
+    run: "fish -c 'curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher'"
+    post:
+      - "ln -s $(pwd)/fish/config/fish/fish_plugins ~/.config/fish"
+      - "fish -c 'fisher update'"
   - kitty
     pre:
       - "wget -P ~/.local/share/fonts https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/VictorMono/Semi-Bold/complete/Victor%20Mono%20SemiBold%20Nerd%20Font%20Complete%20Mono.ttf?raw=true"
