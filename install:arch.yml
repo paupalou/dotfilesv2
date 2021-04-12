@@ -6,11 +6,12 @@ system:
   - curl
   - wget
   - git
-  - base-devel
   - yay
     type: source
     from: aur
     path: $HOME/code/aur/yay
+    pre:
+      - "sudo pacman -S base-devel"
   - xorg-xset
   - xclip
   - fish
