@@ -8,9 +8,9 @@ function _install_source_from_aur {
   print_installing $package_name "aur" $is_package_dependency
 
 	git clone https://aur.archlinux.org/${package_name}.git ${source_path} &>/dev/null
-  cd $source_path
+  cd $source_path &>/dev/null
   yes | makepkg -si &>/dev/null
-  cd -
+  cd - &>/dev/null
 
   echo $(pc "  ✓" $green$bold)
 }
