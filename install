@@ -1,5 +1,6 @@
 #!/bin/bash
 
+source ./script/system_utils.sh
 source ./script/installers.sh
 source ./script/configs_linker.sh
 

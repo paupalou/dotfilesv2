@@ -3,66 +3,6 @@
 source ./script/yaml_parser.sh
 source ./script/print_utils.sh
 
-function _check_sudo {
-	if ! command -v sudo &> /dev/null; then
-		echo "sudo is not installed, install it (as root)"
-		exit 1
-	fi
-}
-
-function _set_localtime {
-	local localtime_file=/etc/localtime
-	if [ ! -f "$localtime" ]; then
-		local TZ=Europe/Madrid
-		sudo ln -snf /usr/share/zoneinfo/$TZ /etc/localtime
-	fi
-}
-
-function _get_distro {
-	echo $(cat /etc/*-release | grep '^ID=' | cut -d "=" -f 2)
-}
-
-function _get_machine_hostname {
-	echo $(hostnamectl | grep 'Static hostname' | cut -d ":" -f 2 | cut -b 2-)
-}
-
-function _grab_install_file_values {
-	local install_file="install.$(_get_distro).$(_get_machine_hostname).yml"
-	local generic_install_file="install.yml"
-
-	if [ ! -f "$install_file" ]; then
-		install_file="install.$(_get_machine_hostname).yml"
-	fi
-
-	if [ ! -f "$install_file" ]; then
-		install_file="install.$(_get_distro).yml"
-	fi
-
-	if [ -f "$install_file" ]; then
-		eval $(parse_yaml "$install_file")
-	else
-		eval $(parse_yaml "$generic_install_file")
-	fi
-}
-
-function _get_value {
-	local prop=$1_$2
-	local value=${!prop}
-	if [ -n "$value" ]; then
-		echo $value
-	else
-		echo $3
-	fi
-}
-
-function _is_checker_loaded {
-	declare -F "_is_${1}_installed" > /dev/null
-}
-
-function _is_installer_loaded {
-	declare -F "_install_${1}_from_${2}" > /dev/null
-}
-
 function _install_item {
 	local item=$1
 	local is_subitem=$2
@@ -112,19 +52,6 @@ function _install_item {
 	fi
 }
 
-function _run_hooks {
-	local hook_type=$1
-	local item=$2
-
-	local hooks=${item}_${hook_type}_
-
-	for hook in ${!hooks}; do
-		if [ -n "$hook" ]; then
-			_run_command "${!hook}"
-		fi
-	done
-}
-
 function _install_category_items {
 	local category=$1
 	local items=${category}_
@@ -139,10 +66,6 @@ function _install_category_items {
 	done
 
 	_end $category
-}
-
-function _run_command {
-	eval "$1" &>/dev/null
 }
 
 function _is_package_installed {
@@ -205,7 +128,8 @@ function _install_binary_from_curl {
 }
 
 function _install {
-	_grab_install_file_values
+	local install_file=$(_grab_file "install.yml")
+	eval $(parse_yaml "$install_file")
 	_check_sudo
 	_set_localtime
 	local category_group
