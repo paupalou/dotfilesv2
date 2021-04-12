@@ -6,6 +6,11 @@ system:
   - curl
   - wget
   - git
+  - base-devel
+  - yay
+    type: source
+    from: aur
+    path: $HOME/code/aur/yay
   - xorg-xset
   - xclip
   - fish
