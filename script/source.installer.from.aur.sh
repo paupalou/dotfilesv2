@@ -9,7 +9,7 @@ function _install_source_from_aur {
 
 	git clone https://aur.archlinux.org/${package_name}.git ${source_path} &>/dev/null
   cd $source_path
-  yes | makepkg -si
+  yes | makepkg -si &>/dev/null
   cd -
 
   echo $(pc "  ✓" $green$bold)
