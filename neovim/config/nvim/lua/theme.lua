@@ -34,5 +34,4 @@ vim.cmd("hi LspDiagnosticsDefaultWarning guifg=#F7A541")
 vim.cmd("hi LspDiagnosticsDefaultInformation guifg=#A1DBB2")
 vim.cmd("hi LspDiagnosticsDefaultHint guifg=#FEE5AD")
 
-
 return M

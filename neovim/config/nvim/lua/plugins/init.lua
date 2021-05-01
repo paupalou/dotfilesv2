@@ -91,9 +91,6 @@ return require('packer').startup {
     use 'jose-elias-alvarez/nvim-lsp-ts-utils'
     use 'folke/lsp-trouble.nvim'
 
-    -- indentation guides
-    use { 'lukas-reineke/indent-blankline.nvim', branch="lua" }
-
     -- improve f/t/F/T
     use 'rhysd/clever-f.vim'
 
