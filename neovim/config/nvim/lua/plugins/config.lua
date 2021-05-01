@@ -7,6 +7,7 @@ require 'plugins.nvim-compe'
 require 'plugins.minimap'
 require 'plugins.startify'
 require 'plugins.grepper'
-require 'plugins.lspsaga'
 require 'plugins.matchup'
 require 'plugins.nvim-tree'
+
+require 'gitsigns'.setup()

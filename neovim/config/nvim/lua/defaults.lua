@@ -20,8 +20,11 @@ vim.o.clipboard = 'unnamedplus'
 vim.o.incsearch = true
 vim.o.inccommand = 'split'
 vim.o.signcolumn = 'auto'
-vim.o.completeopt = 'menuone,noselect'
+vim.o.completeopt = 'menu,menuone,noselect'
 vim.o.mouse = 'nvr'
+vim.o.list = true
+vim.o.listchars = 'tab:»·,trail:·'
+
 -- folds
 vim.wo.foldcolumn = '0'
 vim.wo.foldmethod = 'expr'

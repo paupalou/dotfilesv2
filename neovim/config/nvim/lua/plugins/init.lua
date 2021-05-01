@@ -28,10 +28,10 @@ end
 return require('packer').startup {
   function(use)
     -- packer can manage itself as an optional plugin
-    use {'wbthomason/packer.nvim', opt = true}
+    use { 'wbthomason/packer.nvim', opt = true }
 
     -- lua utils required for some plugins
-    -- use 'nvim-lua/plenary.nvim'
+    use 'nvim-lua/plenary.nvim'
 
     -- color scheme
     use 'mhartington/oceanic-next'
@@ -40,10 +40,7 @@ return require('packer').startup {
     use 'kyazdani42/nvim-web-devicons'
 
     -- statusline
-    use {
-      'hoob3rt/lualine.nvim',
-      requires = {'kyazdani42/nvim-web-devicons', opt = true}
-    }
+    use { 'hoob3rt/lualine.nvim', requires = {'kyazdani42/nvim-web-devicons', opt = true} }
 
     -- tweak cursor hold performance
     use 'antoinemadec/FixCursorHold.nvim'
@@ -63,11 +60,7 @@ return require('packer').startup {
     use 'mhinz/vim-startify'
 
     -- visual signs for VCS
-    use {
-      'lewis6991/gitsigns.nvim',
-      requires = { 'nvim-lua/plenary.nvim' },
-      config = function() require('gitsigns').setup() end
-    }
+    use 'lewis6991/gitsigns.nvim'
 
     -- show marks on signcolumn
     use 'kshenoy/vim-signature'
@@ -88,17 +81,18 @@ return require('packer').startup {
     -- autocompletion engine
     use 'hrsh7th/nvim-compe'
 
-    -- icons on lsp popup suggestions
-    use {
-      'onsails/lspkind-nvim',
-      config = function() require('lspkind').init({}) end
-    }
-
     -- improved matchit
     use 'andymass/vim-matchup'
 
-    -- ui for lsp
+    --  lsp stuff
+    use 'onsails/lspkind-nvim'
     use 'glepnir/lspsaga.nvim'
+    use 'folke/lsp-colors.nvim'
+    use 'jose-elias-alvarez/nvim-lsp-ts-utils'
+    use 'folke/lsp-trouble.nvim'
+
+    -- indentation guides
+    use { 'lukas-reineke/indent-blankline.nvim', branch="lua" }
 
     -- improve f/t/F/T
     use 'rhysd/clever-f.vim'
@@ -126,9 +120,6 @@ return require('packer').startup {
     use 'windwp/nvim-ts-autotag'
 
     -- file explorer
-    use {
-      'kyazdani42/nvim-tree.lua',
-      requires = {'kyazdani42/nvim-web-devicons'}
-    }
+    use 'kyazdani42/nvim-tree.lua'
   end
 }

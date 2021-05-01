@@ -3,8 +3,26 @@ local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 -- typescript and javascript
-require 'lspconfig'.tsserver.setup{
-  capabilities = capabilities
+require 'lspconfig'.tsserver.setup {
+  capabilities = capabilities,
+  on_attach = function (client, _)
+    local ts_utils = require('nvim-lsp-ts-utils')
+    ts_utils.setup {
+      -- use eslint_d
+      eslint_bin = "eslint_d",
+      eslint_args = {"-f", "json", "--stdin", "--stdin-filename", "$FILENAME"},
+      -- eslint_enable_disable_comments = false,
+      eslint_enable_diagnostics = true,
+      eslint_diagnostics_debounce = 250,
+
+      enable_formatting = true,
+      formatter = "eslint_d",
+      formatter_args = { "--fix-to-stdout", "--stdin", "--stdin-filename", "$FILENAME" },
+      format_on_save = true
+    }
+    -- required to enable ESLint code actions and formatting
+    ts_utils.setup_client(client)
+  end
 }
 
 -- HTML
@@ -19,37 +37,37 @@ require 'lspconfig'.denols.setup {
 }
 
 -- rust
-require 'lspconfig'.rls.setup{
+require 'lspconfig'.rls.setup {
   capabilities = capabilities
 }
 
 -- bash
-require 'lspconfig'.bashls.setup{
+require 'lspconfig'.bashls.setup {
   capabilities = capabilities
 }
 
 -- dockerfile
-require 'lspconfig'.dockerls.setup{
+require 'lspconfig'.dockerls.setup {
   capabilities = capabilities
 }
 
 -- godot script
-require 'lspconfig'.gdscript.setup{
+require 'lspconfig'.gdscript.setup {
   capabilities = capabilities
 }
 
 -- json
-require 'lspconfig'.jsonls.setup{
+require 'lspconfig'.jsonls.setup {
   capabilities = capabilities
 }
 
 -- graphql
-require 'lspconfig'.graphql.setup{
+require 'lspconfig'.graphql.setup {
   capabilities = capabilities
 }
 
 -- vim
-require 'lspconfig'.vimls.setup{
+require 'lspconfig'.vimls.setup {
   capabilities = capabilities
 }
 
@@ -86,3 +104,9 @@ vim.fn.sign_define("LspDiagnosticsSignError", {text = ""})
 vim.fn.sign_define("LspDiagnosticsSignWarning", {text = ""})
 vim.fn.sign_define("LspDiagnosticsSignInformation", {text = ""})
 vim.fn.sign_define("LspDiagnosticsSignHint", {text = ""})
+
+require 'lspkind'.init({})
+require 'lspsaga'.init_lsp_saga()
+require 'lsp-colors'.setup {}
+require 'trouble'.setup {}
+require 'lsp.bindings'

@@ -2,6 +2,7 @@ local MAPPER = require 'utils'
 
 MAPPER.nnoremap(']b', '<cmd>:BufferNext<CR>')
 MAPPER.nnoremap('[b', '<cmd>:BufferPrevious<CR>')
+MAPPER.nnoremap('<leader>c', '<cmd>:BufferClose<CR>')
 
 MAPPER.nnoremap('<leader>1', '<cmd>:BufferGoto 1<CR>')
 MAPPER.nnoremap('<leader>2', '<cmd>:BufferGoto 2<CR>')
