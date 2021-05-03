@@ -1,5 +1,6 @@
 require 'defaults'
 require 'utils'
+require 'folds'
 require 'plugins'
 require 'theme'
 require 'remaps'

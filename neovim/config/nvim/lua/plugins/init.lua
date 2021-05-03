@@ -71,9 +71,6 @@ return require('packer').startup {
     -- remove delay on exit insert mode
     use 'jdhao/better-escape.vim'
 
-    -- configs for language servers
-    use 'neovim/nvim-lspconfig'
-
     -- snippets like vscode
     use 'hrsh7th/vim-vsnip'
     use 'hrsh7th/vim-vsnip-integ'
@@ -85,6 +82,7 @@ return require('packer').startup {
     use 'andymass/vim-matchup'
 
     --  lsp stuff
+    use 'neovim/nvim-lspconfig'
     use 'onsails/lspkind-nvim'
     use 'glepnir/lspsaga.nvim'
     use 'folke/lsp-colors.nvim'

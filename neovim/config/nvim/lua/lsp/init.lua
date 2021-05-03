@@ -2,6 +2,17 @@
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+  vim.lsp.diagnostic.on_publish_diagnostics, {
+    virtual_text = false,
+    underline = true,
+    signs = true,
+    update_in_insert = false,
+  }
+)
+vim.cmd [[autocmd CursorHold * lua vim.lsp.diagnostic.show_line_diagnostics()]]
+vim.cmd [[autocmd CursorHoldI * silent! lua vim.lsp.buf.signature_help()]]
+
 -- typescript and javascript
 require 'lspconfig'.tsserver.setup {
   capabilities = capabilities,
@@ -106,7 +117,12 @@ vim.fn.sign_define("LspDiagnosticsSignInformation", {text = ""})
 vim.fn.sign_define("LspDiagnosticsSignHint", {text = ""})
 
 require 'lspkind'.init({})
-require 'lspsaga'.init_lsp_saga()
 require 'lsp-colors'.setup {}
 require 'trouble'.setup {}
+require 'lspsaga'.init_lsp_saga {
+  use_saga_diagnostic_sign = false,
+  finder_definition_icon = ' ',
+  finder_reference_icon = ' ',
+  rename_prompt_prefix = '',
+}
 require 'lsp.bindings'

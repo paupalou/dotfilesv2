@@ -30,8 +30,15 @@ vim.cmd("hi Comment gui=italic")
 vim.cmd("hi SignatureMarkText guifg=#0083ba")
 -- lsp colors
 vim.cmd("hi LspDiagnosticsDefaultError guifg=#F45D4C")
+vim.cmd("hi LspDiagnosticsUnderlineError guifg=#F45D4C gui=undercurl")
+
 vim.cmd("hi LspDiagnosticsDefaultWarning guifg=#F7A541")
+vim.cmd("hi LspDiagnosticsUnderlineWarning guifg=#F7A541 gui=undercurl")
+
 vim.cmd("hi LspDiagnosticsDefaultInformation guifg=#A1DBB2")
+vim.cmd("hi LspDiagnosticsUnderfInformation guifg=#A1DBB2 gui=undercurl")
+
 vim.cmd("hi LspDiagnosticsDefaultHint guifg=#FEE5AD")
+vim.cmd("hi LspDiagnosticsUnderlineHint guifg=#FEE5AD gui=undercurl")
 
 return M
