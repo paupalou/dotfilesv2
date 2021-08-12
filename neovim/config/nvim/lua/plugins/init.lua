@@ -86,7 +86,7 @@ return require('packer').startup {
     use 'onsails/lspkind-nvim'
     use 'glepnir/lspsaga.nvim'
     use 'folke/lsp-colors.nvim'
-    use 'jose-elias-alvarez/nvim-lsp-ts-utils'
+    use { 'jose-elias-alvarez/nvim-lsp-ts-utils', requires = { 'jose-elias-alvarez/null-ls.nvim' } }
     use 'folke/lsp-trouble.nvim'
 
     -- improve f/t/F/T
@@ -112,7 +112,7 @@ return require('packer').startup {
     use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
 
     -- typescript stuff
-    use 'windwp/nvim-ts-autotag'
+    -- use 'windwp/nvim-ts-autotag'
 
     -- file explorer
     use 'kyazdani42/nvim-tree.lua'

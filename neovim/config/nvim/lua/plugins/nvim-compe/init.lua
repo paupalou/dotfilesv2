@@ -13,13 +13,13 @@ require'compe'.setup {
   documentation = true;
   source = {
     path = true;
-    buffer = true;
-    calc = true;
+    buffer = false;
+    calc = false;
     vsnip = true;
     nvim_lsp = true;
     nvim_lua = true;
-    spell = true;
-    treesitter = true;
+    spell = false;
+    treesitter = false;
   };
 }
 
@@ -63,5 +63,3 @@ vim.api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
 
 vim.api.nvim_set_keymap("i", "<C-Space>", "v:lua.expand_snip_or_complete()", {expr = true})
 vim.api.nvim_set_keymap("i", "<CR>", "compe#confirm('<CR>')", {expr = true})
--- vim.api.nvim_set_keymap("i", "<C-f>", "compe#scroll({ 'delta': +4 })", {expr = true})
--- vim.api.nvim_set_keymap("i", "<C-d>", "compe#scroll({ 'delta': -4 })", {expr = true})

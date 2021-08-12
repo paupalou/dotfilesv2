@@ -2,34 +2,40 @@
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 
+-- vim.cmd [[autocmd ColorScheme * highlight NormalFloat guibg=#1f2335]]
+-- vim.cmd [[autocmd ColorScheme * highlight FloatBorder guifg=white guibg=#1f2335]]
+
+local border = {
+  {"╭", "FloatBorder"}, {"─", "FloatBorder"},
+  {"╮", "FloatBorder"}, {"│", "FloatBorder"},
+  {"╯", "FloatBorder"}, {"─", "FloatBorder"},
+  {"╰", "FloatBorder"}, {"│", "FloatBorder"}
+}
+
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   vim.lsp.diagnostic.on_publish_diagnostics, {
     virtual_text = false,
     underline = true,
     signs = true,
-    update_in_insert = false,
+    update_in_insert = false
   }
 )
-vim.cmd [[autocmd CursorHold * lua vim.lsp.diagnostic.show_line_diagnostics()]]
-vim.cmd [[autocmd CursorHoldI * silent! lua vim.lsp.buf.signature_help()]]
+vim.lsp.handlers["textDocument/hover"] =  vim.lsp.with(vim.lsp.handlers.hover, {border = border})
+vim.cmd [[ command! Format execute 'lua vim.lsp.buf.formatting()' ]]
+
+require 'null-ls'.config {}
+require 'lspconfig'["null-ls"].setup {}
 
 -- typescript and javascript
 require 'lspconfig'.tsserver.setup {
   capabilities = capabilities,
   on_attach = function (client, _)
+    -- disable tsserver formatting if you plan on formatting via null-ls
+    client.resolved_capabilities.document_formatting = false
     local ts_utils = require('nvim-lsp-ts-utils')
     ts_utils.setup {
-      -- use eslint_d
-      eslint_bin = "eslint_d",
-      eslint_args = {"-f", "json", "--stdin", "--stdin-filename", "$FILENAME"},
-      -- eslint_enable_disable_comments = false,
-      eslint_enable_diagnostics = true,
-      eslint_diagnostics_debounce = 250,
-
       enable_formatting = true,
-      formatter = "eslint_d",
-      formatter_args = { "--fix-to-stdout", "--stdin", "--stdin-filename", "$FILENAME" },
-      format_on_save = true
+      formatter = "prettier"
     }
     -- required to enable ESLint code actions and formatting
     ts_utils.setup_client(client)
@@ -42,13 +48,13 @@ require 'lspconfig'.html.setup {
 }
 
 -- deno
-require 'lspconfig'.denols.setup {
-  init_options = { enable = false },
-  capabilities = capabilities
-}
+-- require 'lspconfig'.denols.setup {
+--   init_options = { enable = false },
+--   capabilities = capabilities
+-- }
 
 -- rust
-require 'lspconfig'.rls.setup {
+require 'lspconfig'.rust_analyzer.setup {
   capabilities = capabilities
 }
 
