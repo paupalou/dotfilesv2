@@ -10,12 +10,12 @@ system:
     type: source
     from: aur
     path: $HOME/code/aur/yay
-  - xorg-xset
   - xclip
   - fish
 
 apps:
   - nodejs-lts-fermium
+  - npm
     post:
       - "sudo npm install -g neovim"
       - "sudo npm install -g tree-sitter-cli"
@@ -24,6 +24,8 @@ apps:
     post:
       - "rustup component add cargo rls rust-analysis rust-src rustfmt clippy"
   - tmux
+    pre:
+      - "git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm"
   - firefox
   - ripgrep
   - fd
@@ -49,3 +51,4 @@ apps:
       - "wget -nc -P ~/.local/share/fonts https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/JetBrainsMono/Ligatures/Bold/complete/JetBrains%20Mono%20Bold%20Nerd%20Font%20Complete%20Mono.ttf"
       - "wget -nc -P ~/.local/share/fonts https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/JetBrainsMono/Ligatures/MediumItalic/complete/JetBrains%20Mono%20Medium%20Italic%20Nerd%20Font%20Complete%20Mono.ttf"
       - "wget -nc -P ~/.local/share/fonts https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/JetBrainsMono/Ligatures/BoldItalic/complete/JetBrains%20Mono%20Bold%20Italic%20Nerd%20Font%20Complete%20Mono.ttf"
+  - httpie

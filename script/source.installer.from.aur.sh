@@ -12,5 +12,5 @@ function _install_source_from_aur {
   yes | makepkg -si &>/dev/null
   cd - &>/dev/null
 
-  echo $(pc "  ✓" $green$bold)
+  echo $(pc "  ✓" $green)
 }

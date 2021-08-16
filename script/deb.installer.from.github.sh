@@ -29,6 +29,6 @@ function _install_deb_from_github {
   sudo dpkg -i $package_file 1>/dev/null
   rm $package_file
 
-  echo $(pc "  ✓" $green$bold)
+  echo $(pc "  ✓" $green)
 }
 

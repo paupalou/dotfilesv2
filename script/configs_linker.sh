@@ -79,7 +79,7 @@ function subfolder_files {
   local file_counter=0
 
   local overwrite_all=false backup_all=false skip_all=false
-  for src in $(find -H $absolute_path -type f ! -name "*:*" ! -path "*/.git/*" -type f ! -path "*/.*" -printf '%P\n')
+  for src in $(find -H $absolute_path -type f ! -name "*:*" ! -path "*/.git/*" -printf '%P\n')
   do
     local file_name=$(basename "${src}")
     local destiny_file_name=$file_name

@@ -113,7 +113,7 @@ function _install_source_from_github {
 	_run_command "$run"
 	cd -
 
-	echo $(pc "  ✓" $green$bold)
+	echo $(pc "  ✓" $green)
 }
 
 function _install_binary_from_curl {
@@ -124,7 +124,7 @@ function _install_binary_from_curl {
 
 	_run_command "$run"
 
-	echo $(pc "  ✓" $green$bold)
+	echo $(pc "  ✓" $green)
 }
 
 function _install {

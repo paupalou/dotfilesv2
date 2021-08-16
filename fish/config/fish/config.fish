@@ -5,7 +5,7 @@ set -gx EDITOR nvim
 set -gx XDG_CONFIG_HOME $HOME/.config
 setpath $HOME/.local/bin
 
-set config_files (find $HOME/dotfiles -mindepth 2 ! -path "*/fish/*" -type f -name  "*.fish")
+set config_files (find $HOME/.dotfiles -mindepth 2 ! -path "*/fish/*" -type f -name  "*.fish")
 
 for file in $config_files
   source $file
@@ -18,7 +18,7 @@ end
 
 # keybindings
 bind \cb backward-word
-bind \ct __fzf_search_current_dir
+bind \ct _fzf_search_directory
 
 # fzf
 set fzf_fd_opts --hidden --exclude=.git --exclude=node_modules
@@ -28,6 +28,3 @@ set -x FZF_DEFAULT_COMMAND fd --type f
 
 # tide
 set -g tide_right_prompt_items
-
-# keyboard repeat rate
-xset r rate 180 50
